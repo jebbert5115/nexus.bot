@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus — Discord Bot</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #08090f;
+      --bg-secondary: #0d1524;
+      --bg-tertiary: #112038;
+      --bg-card: #0f1d33;
+      --text-primary: #e8edf5;
+      --text-secondary: #8aa3c8;
+      --text-muted: #546e8a;
+      --accent: #2272d4;
+      --accent-bright: #3a9bff;
+      --accent-hover: #1a5ab0;
+      --border: #1a2d4a;
+      --border-light: #1f3657;
+      --silver: #9aaabf;
+      --success: #2ea87e;
+      --table-alt: #0f1c30;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+
+    a { color: var(--accent-bright); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    strong { color: var(--text-primary); font-weight: 600; }
+
+    code {
+      background: var(--bg-tertiary);
+      color: var(--accent-bright);
+      border: 1px solid var(--border);
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 0.88em;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(8, 9, 15, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .nav-brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-brand span { color: var(--accent-bright); }
+
+    .nav-links {
+      display: flex;
+      gap: 4px;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .nav-links a:hover {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 100px 24px 80px;
+      background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(34, 114, 212, 0.18) 0%, transparent 70%),
+                  radial-gradient(ellipse 40% 40% at 80% 60%, rgba(58, 155, 255, 0.06) 0%, transparent 60%),
+                  var(--bg-primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 15% 25%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 72% 15%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,0.25) 0%, transparent 100%),
+        radial-gradient(1px 1px at 88% 45%, rgba(255,255,255,0.35) 0%, transparent 100%),
+        radial-gradient(1px 1px at 5% 80%, rgba(255,255,255,0.2) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 60% 88%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 50%, rgba(58,155,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 92% 78%, rgba(255,255,255,0.2) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(34, 114, 212, 0.15);
+      border: 1px solid rgba(34, 114, 212, 0.4);
+      color: var(--accent-bright);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #e8edf5 0%, #8aa3c8 60%, #2272d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 36px;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 14px 30px;
+      border-radius: 10px;
+      transition: background 0.15s, transform 0.1s;
+      text-decoration: none;
+    }
+
+    .hero-cta:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      text-decoration: none;
+    }
+
+    /* ── SECTION WRAPPER ── */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .section-sm { padding: 60px 24px; }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-bright);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .section-sub {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 600px;
+      margin-bottom: 48px;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── FEATURE GRID ── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+
+    .feature-card:hover {
+      border-color: var(--border-light);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .feature-card h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── STEPS ── */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .step {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      background: rgba(34, 114, 212, 0.15);
+      border: 1px solid rgba(34, 114, 212, 0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--accent-bright);
+      margin-top: 2px;
+    }
+
+    .step-body h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+    .step-body p { font-size: 0.92rem; color: var(--text-secondary); }
+
+    /* ── COMMANDS ── */
+    .cmd-filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .filter-btn {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .filter-btn:hover { border-color: var(--border-light); color: var(--text-primary); }
+
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .cmd-groups { display: flex; flex-direction: column; gap: 32px; }
+
+    .cmd-group { display: none; }
+    .cmd-group.visible { display: block; }
+
+    .cmd-group-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cmd-group-header h3 { font-size: 1.1rem; font-weight: 600; }
+    .cmd-group-badge {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      background: rgba(34, 114, 212, 0.15);
+      border: 1px solid rgba(34, 114, 212, 0.3);
+      border-radius: 10px;
+      color: var(--accent-bright);
+    }
+
+    .cmd-table { width: 100%; border-collapse: collapse; }
+    .cmd-table tr { border-bottom: 1px solid var(--border); }
+    .cmd-table tr:last-child { border-bottom: none; }
+    .cmd-table td { padding: 10px 8px; font-size: 0.88rem; vertical-align: top; }
+    .cmd-table td:first-child { width: 260px; white-space: nowrap; }
+    .cmd-table td:last-child { color: var(--text-secondary); }
+    .cmd-table tr:nth-child(even) td { background: var(--table-alt); }
+
+    .cmd-note {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ── SETUP GUIDES ── */
+    .guide-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    details {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    details[open] { border-color: var(--border-light); }
+
+    summary {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 22px;
+      cursor: pointer;
+      list-style: none;
+      font-weight: 600;
+      font-size: 1rem;
+      user-select: none;
+      transition: background 0.15s;
+    }
+
+    summary:hover { background: var(--bg-tertiary); }
+
+    summary::-webkit-details-marker { display: none; }
+
+    .summary-icon { font-size: 1.2rem; }
+
+    .summary-chevron {
+      margin-left: auto;
+      color: var(--text-muted);
+      transition: transform 0.2s;
+      font-style: normal;
+      font-size: 0.9rem;
+    }
+
+    details[open] .summary-chevron { transform: rotate(90deg); }
+
+    .guide-body {
+      padding: 0 22px 22px;
+      border-top: 1px solid var(--border);
+    }
+
+    .guide-body p {
+      color: var(--text-secondary);
+      font-size: 0.93rem;
+      margin-top: 16px;
+      margin-bottom: 14px;
+    }
+
+    .guide-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      list-style: none;
+      counter-reset: guide-counter;
+    }
+
+    .guide-steps li {
+      counter-increment: guide-counter;
+      display: flex;
+      gap: 12px;
+      font-size: 0.92rem;
+    }
+
+    .guide-steps li::before {
+      content: counter(guide-counter);
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      background: rgba(34, 114, 212, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent-bright);
+      margin-top: 3px;
+    }
+
+    .guide-steps li span { color: var(--text-secondary); }
+
+    .guide-tip {
+      margin-top: 14px;
+      background: rgba(34, 114, 212, 0.08);
+      border-left: 3px solid var(--accent);
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    /* ── FAQ STRIP ── */
+    .alt-bg { background: var(--bg-secondary); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      padding: 28px 24px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .footer-links a { color: var(--text-secondary); font-size: 0.85rem; }
+    .footer-links a:hover { color: var(--accent-bright); text-decoration: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .hero { padding: 72px 20px 56px; }
+      .section { padding: 56px 20px; }
+      .cmd-table td:first-child { width: auto; white-space: normal; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand"><span>N</span>exus</div>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#getting-started">Get Started</a></li>
+      <li><a href="#commands">Commands</a></li>
+      <li><a href="#setup">Setup Guides</a></li>
+      <li><a href="https://discord.com/invite/GaFAnh2xdz" target="_blank" rel="noopener">Support Server</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-badge">Discord Bot</div>
+  <h1>Everything your server needs, in one bot.</h1>
+  <p>Nexus handles moderation, security, leveling, economy, games, logging, and more — so you can focus on building your community.</p>
+  <a href="https://discord.com/oauth2/authorize?client_id=1482084412970631379" class="hero-cta" target="_blank" rel="noopener">
+    ➕ Add Nexus to Your Server
+  </a>
+</section>
+
+<!-- ══ FEATURES ══ -->
+<section class="section" id="features">
+  <div class="section-label">What Nexus Does</div>
+  <h2 class="section-title">A complete toolkit for every server</h2>
+  <p class="section-sub">Nexus is built around 14 feature systems. Whether you run a small friend group or a large community, every system can be enabled and configured independently to fit your needs.</p>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <span class="feature-icon">🛡️</span>
+      <h3>Moderation</h3>
+      <p>Kick, ban, timeout, warn, purge messages, lock channels, and softban — all the tools a mod team needs, plus a warning history system.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔒</span>
+      <h3>Anti-Nuke</h3>
+      <p>Automatically detects and stops raids, message floods, and mention spam. Offenders are timed out instantly. Unauthorized bots can be auto-kicked the moment they join.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🤖</span>
+      <h3>Auto-Mod</h3>
+      <p>Uses Discord's native AutoMod API to enforce profanity filters, spam detection, and custom keyword blocks — with per-channel and per-user exemptions.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📈</span>
+      <h3>Leveling</h3>
+      <p>Members earn XP by chatting. Set level-up announcement channels and automatically assign roles when members hit milestones.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">💰</span>
+      <h3>Economy</h3>
+      <p>A fully customizable virtual currency system with daily/hourly rewards, gambling games (dice, slots, blackjack, coinflip), transfers, and a leaderboard.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🎮</span>
+      <h3>Entertainment</h3>
+      <p>Giveaways, trivia (14 categories, 1400 questions), polls, Would You Rather, magic 8-ball, jokes, memes, riddles, roasts, and more.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📋</span>
+      <h3>Logging</h3>
+      <p>Track member joins/leaves, message edits/deletes, kicks, bans, timeouts, role changes, and more — all sent to a channel of your choice.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">👋</span>
+      <h3>Welcome</h3>
+      <p>Send a custom welcome message to new members in any channel you choose. Test it any time without waiting for someone to join.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔢</span>
+      <h3>Counting</h3>
+      <p>The classic counting game — set a dedicated channel, and Nexus tracks the count, reacts with emojis, and resets on mistakes.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">💬</span>
+      <h3>Feedback</h3>
+      <p>Let your members submit suggestions and reports directly through Nexus, routed to dedicated channels for your team to review.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">💾</span>
+      <h3>Backup</h3>
+      <p>Snapshot your server's roles and channels for disaster recovery. Restore them in seconds if something goes wrong.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🖼️</span>
+      <h3>Images</h3>
+      <p>Fun image commands — pet avatars, Minecraft achievement cards, wanted posters, pixelated avatars, and more.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔧</span>
+      <h3>Utility</h3>
+      <p>Reminders, countdowns, invite tracking, sticky messages, server stats, role info, emoji lists, word definitions, and a full <code>/help</code> system.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔐</span>
+      <h3>Security Checkup</h3>
+      <p>Run <code>/security checkup</code> to get a full scan of your server's security posture — dangerous role permissions, bot exposure, and Anti-Nuke status.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══ GETTING STARTED ══ -->
+<section class="section" id="getting-started">
+  <div class="section-label">For Dummies Guide</div>
+  <h2 class="section-title">Getting started in 4 steps</h2>
+  <p class="section-sub">You don't need to be technical to set up Nexus. Here's everything you need to do after adding the bot to your server.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>Add Nexus to your server</h3>
+        <p>Click the <strong>Add Nexus to Your Server</strong> button above. You'll need the <strong>Manage Server</strong> permission on Discord to add bots. Select your server from the dropdown and approve the requested permissions.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>Check that the bot is online</h3>
+        <p>You should see <strong>Nexus</strong> appear in your server's member list. Try running <code>/ping</code> — the bot will reply with its latency. If it doesn't respond, make sure it has permission to send messages in that channel.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>Explore the help system</h3>
+        <p>Type <code>/help</code> in any channel. This shows every command category. You can jump to a specific category using the dropdown, or pass a category name directly: <code>/help moderation</code>.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h3>Set up the systems you want</h3>
+        <p>Pick the features you need from the <a href="#setup">Setup Guides</a> section below. Each system is independent — you only need to configure what you actually want to use.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══ COMMANDS ══ -->
+<section class="section" id="commands">
+  <div class="section-label">Command Reference</div>
+  <h2 class="section-title">All commands at a glance</h2>
+  <p class="section-sub">Nexus uses slash commands (<code>/command</code>) for everything. Moderation commands also support the <code>n!</code> prefix (e.g. <code>n!kick</code>, <code>n!ban</code>). Filter by category below.</p>
+
+  <div class="cmd-filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="moderation">🛡️ Moderation</button>
+    <button class="filter-btn" data-filter="antinuke">🔒 Anti-Nuke</button>
+    <button class="filter-btn" data-filter="automod">🤖 Auto-Mod</button>
+    <button class="filter-btn" data-filter="utility">🔧 Utility</button>
+    <button class="filter-btn" data-filter="economy">💰 Economy</button>
+    <button class="filter-btn" data-filter="entertainment">🎮 Entertainment</button>
+    <button class="filter-btn" data-filter="leveling">📈 Leveling</button>
+    <button class="filter-btn" data-filter="counting">🔢 Counting</button>
+    <button class="filter-btn" data-filter="logging">📋 Logging</button>
+    <button class="filter-btn" data-filter="welcome">👋 Welcome</button>
+    <button class="filter-btn" data-filter="feedback">💬 Feedback</button>
+    <button class="filter-btn" data-filter="images">🖼️ Images</button>
+    <button class="filter-btn" data-filter="backup">💾 Backup</button>
+    <button class="filter-btn" data-filter="security">🔐 Security</button>
+  </div>
+
+  <div class="cmd-groups">
+
+    <div class="cmd-group visible" data-group="moderation">
+      <div class="cmd-group-header">
+        <span>🛡️</span>
+        <h3>Moderation</h3>
+        <span class="cmd-group-badge">13 commands</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>/purge</code></td><td>Delete multiple messages from a channel at once</td></tr>
+        <tr><td><code>/warn</code></td><td>Issue a warning to a member (stored in their history)</td></tr>
+        <tr><td><code>/warnings</code></td><td>View the full warning history for a member</td></tr>
+        <tr><td><code>/clearwarnings</code></td><td>Clear all warnings for a member</td></tr>
+        <tr><td><code>/kick</code></td><td>Kick a member from the server</td></tr>
+        <tr><td><code>/ban</code></td><td>Ban a member from the server</td></tr>
+        <tr><td><code>/unban</code></td><td>Unban a user by their Discord ID</td></tr>
+        <tr><td><code>/timeout</code></td><td>Timeout a member for a set duration</td></tr>
+        <tr><td><code>/untimeout</code></td><td>Remove a timeout from a member early</td></tr>
+        <tr><td><code>/slowmode</code></td><td>Set a slowmode delay for a channel</td></tr>
+        <tr><td><code>/lock</code></td><td>Lock a channel so members can't send messages</td></tr>
+        <tr><td><code>/unlock</code></td><td>Unlock a previously locked channel</td></tr>
+        <tr><td><code>/softban</code></td><td>Ban then instantly unban (clears recent messages without a permanent ban)</td></tr>
+      </table>
+      <p class="cmd-note">Prefix versions also available: <code>n!kick</code>, <code>n!ban</code>, <code>n!sb</code>, <code>n!t</code>, <code>n!ut</code></p>
+    </div>
+
+    <div class="cmd-group visible" data-group="antinuke">
+      <div class="cmd-group-header">
+        <span>🔒</span>
+        <h3>Anti-Nuke</h3>
+        <span class="cmd-group-badge">9 commands · Server owner only</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>/antinuke enable</code></td><td>Enable anti-nuke protection for the server</td></tr>
+        <tr><td><code>/antinuke disable</code></td><td>Disable anti-nuke protection</td></tr>
+        <tr><td><code>/antinuke status</code></td><td>View the current anti-nuke configuration</td></tr>
+        <tr><td><code>/antinuke config msg-threshold</code></td><td>Set how many messages per window triggers a flood alert</td></tr>
+        <tr><td><code>/antinuke config msg-window</code></td><td>Set the time window (seconds) for message flood detection</td></tr>
+        <tr><td><code>/antinuke config mention-threshold</code></td><td>Set how many mentions per window triggers an alert</td></tr>
+        <tr><td><code>/antinuke config mention-window</code></td><td>Set the time window (seconds) for mention flood detection</td></tr>
+        <tr><td><code>/antinuke config timeout-duration</code></td><td>Set how long offenders are timed out (seconds)</td></tr>
+        <tr><td><code>/antinuke config botjoin</code></td><td>Enable/disable auto-kicking of unauthorized bots on join</td></tr>
+      </table>
+    </div>
+
+    <div class="cmd-group visible" data-group="automod">
+      <div class="cmd-group-header">
+        <span>🤖</span>
+        <h3>Auto-Mod</h3>
+        <span class="cmd-group-badge">13 commands · Server owner only</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>/automod setup</code></td><td>Create AutoMod rules for profanity, spam, and mention spam</td></tr>
+        <tr><td><code>/automod disable</code></td><td>Remove all Nexus-created AutoMod rules</td></tr>
+        <tr><td><code>/automod status</code></td><td>View all active AutoMod rules</td></tr>
+        <tr><td><code>/automod addword</code></td><td>Add a custom keyword to the filter</td></tr>
+        <tr><td><code>/automod removeword</code></td><td>Remove a keyword from the filter</td></tr>
+        <tr><td><code>/automod listwords</code></td><td>List all custom keywords currently in the filter</td></tr>
+        <tr><td><code>/automod toggle</code></td><td>Enable or disable a specific AutoMod rule</td></tr>
+        <tr><td><code>/automod whitelist add-channel</code></td><td>Exempt a channel from a specific rule</td></tr>
+        <tr><td><code>/automod whitelist remove-channel</code></td><td>Remove a channel exemption</td></tr>
+        <tr><td><code>/automod whitelist add-user</code></td><td>Exempt a specific user from AutoMod</td></tr>
+        <tr><td><code>/automod whitelist remove-user</code></td><td>Remove a user exemption</td></tr>
+        <tr><td><code>/automod whitelist list</code></td><td>Show all whitelisted channels and users</td></tr>
+        <tr><td><code>/nickname ban</code></td><td>Prevent a role's members from keeping custom nicknames</td></tr>
+      </table>
+    </div>
+
+    <div class="cmd-group visible" data-group="utility">
+      <div class="cmd-group-header">
+        <span>🔧</span>
+        <h3>Utility</h3>
+        <span class="cmd-group-badge">18 commands</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>/help</code></td><td>Browse all available commands by category</td></tr>
+        <tr><td><code>/reminder</code></td><td>Set a reminder — Nexus will ping you when time's up</td></tr>
+        <tr><td><code>/countdownto</code></td><td>Create a countdown timer to a specific date</td></tr>
+        <tr><td><code>/random-color</code></td><td>Generate a random color with its hex code</td></tr>
+        <tr><td><code>/define</code></td><td>Look up the definition of a word</td></tr>
+        <tr><td><code>/avatar</code></td><td>View your own or another user's full-size avatar</td></tr>
+        <tr><td><code>/server-stats</code></td><td>View member count, channel count, and server statistics</td></tr>
+        <tr><td><code>/message-stats</code></td><td>View message activity statistics for the server</td></tr>
+        <tr><td><code>/user-info</code></td><td>View account details and server info for a user</td></tr>
+        <tr><td><code>/emoji-list</code></td><td>List all custom emojis in the server</td></tr>
+        <tr><td><code>/invite-info</code></td><td>View details about a specific invite link</td></tr>
+        <tr><td><code>/role-info</code></td><td>View details about a specific role</td></tr>
+        <tr><td><code>/server-info</code></td><td>View general server information</td></tr>
+        <tr><td><code>/set-join-channel</code></td><td>Set a channel for join announcements</td></tr>
+        <tr><td><code>/test-join-announce</code></td><td>Test the join announcement in the configured channel</td></tr>
+        <tr><td><code>/inviter</code></td><td>See which invite link a user joined with (and who made it)</td></tr>
+        <tr><td><code>/invites</code></td><td>View the invite leaderboard for the server</td></tr>
+        <tr><td><code>/sticky set</code></td><td>Set a sticky message that re-posts itself after every message in a channel</td></tr>
+        <tr><td><code>/sticky remove</code></td><td>Remove the sticky message from a channel</td></tr>
+      </table>
+    </div>
+
+    <div class="cmd-group visible" data-group="economy">
+      <div class="cmd-group-header">
+        <span>💰</span>
+        <h3>Economy</h3>
+        <span class="cmd-group-badge">10 commands</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>/economy</code></td><td>Enable, disable, or check the status of the economy system</td></tr>
+        <tr><td><code>/balance</code></td><td>Check your own or another user's balance</td></tr>
+        <tr><td><code>/daily</code></td><td>Claim your daily currency reward (resets every 24 hours)</td></tr>
+        <tr><td><code>/hourly</code></td><td>Claim your hourly currency reward</td></tr>
+        <tr><td><code>/transfer</code></td><td>Send currency to another member</td></tr>
+        <tr><td><code>/gamble</code></td><td>Gamble currency — choose dice, coinflip, slots, or blackjack</td></tr>
+        <tr><td><code>/leaderboard-money</code></td><td>View the richest members on the server</td></tr>
+        <tr><td><code>/set-currency</code></td><td>Customize the currency name and symbol</td></tr>
+        <tr><td><code>/add-money</code></td><td>Add currency to a user's balance (admin only)</td></tr>
+        <tr><td><code>/remove-money</code></td><td>Remove currency from a user's balance (admin only)</td></tr>
+      </table>
+    </div>
+
+    <div class="cmd-group visible" data-group="entertainment">
+      <div class="cmd-group-header">
+        <span>🎮</span>
+        <h3>Entertainment</h3>
+        <span class="cmd-group-badge">21 commands</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>/8ball</code></td><td>Ask the magic 8-ball a question</td></tr>
+        <tr><td><code>/roll</code></td><td>Roll dice using standard notation (e.g. <code>2d6</code>)</td></tr>
+        <tr><td><code>/rps</code></td><td>Play Rock, Paper, Scissors against the bot</td></tr>
+        <tr><td><code>/coinflip</code></td><td>Flip a coin</td></tr>
+        <tr><td><code>/choose</code></td><td>Pick a random option from a list you provide</td></tr>
+        <tr><td><code>/joke</code></td><td>Get a random joke</td></tr>
+        <tr><td><code>/ping</code></td><td>Check the bot's latency</td></tr>
+        <tr><td><code>/react</code></td><td>React to a message with a specified emoji</td></tr>
+        <tr><td><code>/giveaway</code></td><td>Start a timed giveaway open to all members</td></tr>
+        <tr><td><code>/vip-giveaway</code></td><td>Start a giveaway restricted to a specific role</td></tr>
+        <tr><td><code>/meme</code></td><td>Get a random meme</td></tr>
+        <tr><td><code>/quote</code></td><td>Get a random inspirational quote</td></tr>
+        <tr><td><code>/fact</code></td><td>Get a random interesting fact</td></tr>
+        <tr><td><code>/poll</code></td><td>Create a poll for members to vote on</td></tr>
+        <tr><td><code>/riddle</code></td><td>Get a riddle to solve</td></tr>
+        <tr><td><code>/trivia</code></td><td>Play a trivia question — choose from 14 categories</td></tr>
+        <tr><td><code>/would-you-rather</code></td><td>Get a Would You Rather question</td></tr>
+        <tr><td><code>/fortune</code></td><td>Get your fortune told</td></tr>
+        <tr><td><code>/compliment</code></td><td>Send a compliment to someone</td></tr>
+        <tr><td><code>/roast</code></td><td>Send a friendly roast to someone</td></tr>
+        <tr><td><code>/roulette</code></td><td>Play Russian roulette</td></tr>
+      </table>
+    </div>
+
+    <div class="cmd-group visible" data-group="leveling">
+      <div class="cmd-group-header">
+        <span>📈</span>
+        <h3>Leveling</h3>
+        <span class="cmd-group-badge">9 commands</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>/toggle-leveling</code></td><td>Enable or disable the leveling system for the server</td></tr>
+        <tr><td><code>/set-level-channel</code></td><td>Set the channel where level-up announcements are posted</td></tr>
+        <tr><td><code>/create-level-role</code></td><td>Assign a role that is automatically given when a member hits a certain level</td></tr>
+        <tr><td><code>/leaderboard</code></td><td>View the XP leaderboard for the server</td></tr>
+        <tr><td><code>/rank</code></td><td>View your current rank, level, and XP progress</td></tr>
+        <tr><td><code>/add-xp</code></td><td>Manually add XP to a member (admin only)</td></tr>
+        <tr><td><code>/set-level</code></td><td>Set a member's level directly (admin only)</td></tr>
+        <tr><td><code>/reset-user-level</code></td><td>Reset a specific member's level and XP (admin only)</td></tr>
+        <tr><td><code>/reset-level-system</code></td><td>Reset the entire leveling system for the server (admin only)</td></tr>
+      </table>
+    </div>
+
+    <div class="cmd-group visible" data-group="counting">
+      <div class="cmd-group-header">
+        <span>🔢</span>
+        <h3>Counting</h3>
+        <span class="cmd-group-badge">5 commands</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>/counting setup</code></td><td>Designate a channel as the counting game channel</td></tr>
+        <tr><td><code>/counting stats</code></td><td>View counting game statistics (current count, high score, etc.)</td></tr>
+        <tr><td><code>/counting reactions</code></td><td>Set the emoji reactions for correct and incorrect counts</td></tr>
+        <tr><td><code>/counting reset</code></td><td>Reset the current count back to zero</td></tr>
+        <tr><td><code>/counting config</code></td><td>Allow or disallow regular chat messages in the counting channel</td></tr>
+      </table>
+    </div>
+
+    <div class="cmd-group visible" data-group="logging">
+      <div class="cmd-group-header">
+        <span>📋</span>
+        <h3>Logging</h3>
+        <span class="cmd-group-badge">7 commands</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>/logging</code></td><td>Enable, disable, or view the current logging configuration</td></tr>
+        <tr><td><code>/log-channel</code></td><td>Set the channel where log events are posted</td></tr>
+        <tr><td><code>/log-events</code></td><td>Add or remove specific event types to log (e.g. message deletes, bans)</td></tr>
+        <tr><td><code>/log-events-list</code></td><td>Show a list of all available log event types</td></tr>
+        <tr><td><code>/log-ignore-channel</code></td><td>Exclude a channel from being logged</td></tr>
+        <tr><td><code>/log-ignore-user</code></td><td>Exclude a specific user from being logged</td></tr>
+        <tr><td><code>/log-test</code></td><td>Send a test log message to verify the setup is working</td></tr>
+      </table>
+    </div>
+
+    <div class="cmd-group visible" data-group="welcome">
+      <div class="cmd-group-header">
+        <span>👋</span>
+        <h3>Welcome</h3>
+        <span class="cmd-group-badge">2 commands</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>/welcome-config</code></td><td>Configure the welcome message and the channel it's sent to when new members join</td></tr>
+        <tr><td><code>/test-welcome</code></td><td>Send a test welcome message to verify how it will look</td></tr>
+      </table>
+    </div>
+
+    <div class="cmd-group visible" data-group="feedback">
+      <div class="cmd-group-header">
+        <span>💬</span>
+        <h3>Feedback</h3>
+        <span class="cmd-group-badge">5 commands</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>/set-suggestion-channel</code></td><td>Set the channel where member suggestions are posted</td></tr>
+        <tr><td><code>/set-report-channel</code></td><td>Set the channel where member reports are posted</td></tr>
+        <tr><td><code>/suggest</code></td><td>Submit a suggestion for the server</td></tr>
+        <tr><td><code>/report</code></td><td>Submit a report about a member or issue</td></tr>
+        <tr><td><code>/officialfeedback</code></td><td>Send feedback directly to the Nexus developer team</td></tr>
+      </table>
+    </div>
+
+    <div class="cmd-group visible" data-group="images">
+      <div class="cmd-group-header">
+        <span>🖼️</span>
+        <h3>Images</h3>
+        <span class="cmd-group-badge">5 commands</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>/pet</code></td><td>Generate an animated "petting" GIF using someone's avatar</td></tr>
+        <tr><td><code>/achievement</code></td><td>Generate a Minecraft-style achievement popup</td></tr>
+        <tr><td><code>/wanted</code></td><td>Create a Wild West wanted poster with someone's avatar</td></tr>
+        <tr><td><code>/trash</code></td><td>Put someone's avatar into a trash can image</td></tr>
+        <tr><td><code>/pixel</code></td><td>Pixelate someone's avatar</td></tr>
+      </table>
+    </div>
+
+    <div class="cmd-group visible" data-group="backup">
+      <div class="cmd-group-header">
+        <span>💾</span>
+        <h3>Backup</h3>
+        <span class="cmd-group-badge">5 commands</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>/backup create</code></td><td>Create a snapshot of the server's roles and channels</td></tr>
+        <tr><td><code>/backup list</code></td><td>List all saved backups for the server</td></tr>
+        <tr><td><code>/backup info</code></td><td>View the contents of a specific backup</td></tr>
+        <tr><td><code>/backup restore</code></td><td>Restore roles and channels from a saved backup</td></tr>
+        <tr><td><code>/backup delete</code></td><td>Permanently delete a saved backup</td></tr>
+      </table>
+    </div>
+
+    <div class="cmd-group visible" data-group="security">
+      <div class="cmd-group-header">
+        <span>🔐</span>
+        <h3>Security</h3>
+        <span class="cmd-group-badge">1 command · Server owner only</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>/security checkup</code></td><td>Run a full security scan of the server — checks role permissions, bot exposure, Anti-Nuke status, and more</td></tr>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══ SETUP GUIDES ══ -->
+<div class="alt-bg">
+<section class="section" id="setup">
+  <div class="section-label">Setup Guides</div>
+  <h2 class="section-title">How to set up each system</h2>
+  <p class="section-sub">Click any system below to expand its step-by-step setup guide. Each guide tells you exactly which commands to run and in what order.</p>
+
+  <div class="guide-grid">
+
+    <details>
+      <summary>
+        <span class="summary-icon">🛡️</span>
+        Moderation — warnings, kicks, bans, timeouts
+        <i class="summary-chevron">›</i>
+      </summary>
+      <div class="guide-body">
+        <p>Moderation commands are available immediately after adding Nexus — no setup needed. They require the matching Discord permission (e.g. <strong>Kick Members</strong> to use <code>/kick</code>).</p>
+        <ol class="guide-steps">
+          <li><span>Use <code>/warn @user [reason]</code> to issue a warning. Warnings are stored permanently.</span></li>
+          <li><span>Use <code>/warnings @user</code> to review a member's warning history at any time.</span></li>
+          <li><span>Use <code>/clearwarnings @user</code> to wipe a member's record if needed.</span></li>
+          <li><span>Use <code>/purge [number]</code> to bulk-delete messages (up to 100 at a time).</span></li>
+          <li><span>Use <code>/timeout @user [duration]</code> to mute a member temporarily. Duration examples: <code>10m</code>, <code>1h</code>, <code>7d</code>.</span></li>
+          <li><span>Use <code>/softban @user</code> to clear a user's recent messages without a permanent ban.</span></li>
+        </ol>
+        <div class="guide-tip">💡 Prefix versions work too: <code>n!kick</code>, <code>n!ban</code>, <code>n!t</code> (timeout), <code>n!ut</code> (untimeout), <code>n!sb</code> (softban).</div>
+      </div>
+    </details>
+
+    <details>
+      <summary>
+        <span class="summary-icon">🔒</span>
+        Anti-Nuke — stop raids and message floods
+        <i class="summary-chevron">›</i>
+      </summary>
+      <div class="guide-body">
+        <p>Anti-Nuke watches for message floods and mention spam in real time and automatically times out offenders. Only the server owner can configure this.</p>
+        <ol class="guide-steps">
+          <li><span>Run <code>/antinuke enable</code> to switch on protection.</span></li>
+          <li><span>Set the message flood threshold: <code>/antinuke config msg-threshold</code> (how many messages) and <code>/antinuke config msg-window</code> (within how many seconds). Example: 10 messages in 5 seconds.</span></li>
+          <li><span>Set the mention flood threshold: <code>/antinuke config mention-threshold</code> and <code>/antinuke config mention-window</code>. Example: 5 mentions in 10 seconds.</span></li>
+          <li><span>Set how long offenders are timed out: <code>/antinuke config timeout-duration</code> (seconds). Example: <code>600</code> = 10 minutes.</span></li>
+          <li><span>Optional — enable bot-join protection: <code>/antinuke config botjoin</code> and set it to <code>enabled</code>. Any bot that joins without being pre-authorized will be auto-kicked.</span></li>
+          <li><span>Verify the configuration with <code>/antinuke status</code>.</span></li>
+        </ol>
+        <div class="guide-tip">💡 Use <code>/antinuke disable</code> to turn off protection at any time without losing your configuration.</div>
+      </div>
+    </details>
+
+    <details>
+      <summary>
+        <span class="summary-icon">🤖</span>
+        Auto-Mod — filter words, spam, and mentions
+        <i class="summary-chevron">›</i>
+      </summary>
+      <div class="guide-body">
+        <p>Auto-Mod uses Discord's built-in AutoMod API. Nexus creates and manages the rules for you. Only the server owner can run these commands.</p>
+        <ol class="guide-steps">
+          <li><span>Run <code>/automod setup</code> to create the standard rule set: profanity filter, spam detection, and mention spam detection.</span></li>
+          <li><span>Add custom banned words: <code>/automod addword [word]</code>. Repeat for each word you want blocked.</span></li>
+          <li><span>Exempt a safe channel (e.g. #staff) from a rule: <code>/automod whitelist add-channel [channel] [rule]</code>.</span></li>
+          <li><span>Exempt a trusted user: <code>/automod whitelist add-user @user [rule]</code>.</span></li>
+          <li><span>Toggle any rule on or off without deleting it: <code>/automod toggle [rule]</code>.</span></li>
+          <li><span>Check the current state at any time: <code>/automod status</code>.</span></li>
+        </ol>
+        <div class="guide-tip">💡 To give a role blanket AutoMod immunity, assign them the <strong>AutoMod Exempt</strong> role — Nexus creates this role automatically.</div>
+      </div>
+    </details>
+
+    <details>
+      <summary>
+        <span class="summary-icon">📈</span>
+        Leveling — XP, ranks, and role rewards
+        <i class="summary-chevron">›</i>
+      </summary>
+      <div class="guide-body">
+        <p>Members automatically earn XP just by chatting. Nexus handles everything in the background once you enable the system.</p>
+        <ol class="guide-steps">
+          <li><span>Enable the system: <code>/toggle-leveling</code>.</span></li>
+          <li><span>Set a channel for level-up announcements: <code>/set-level-channel #channel</code>. If you skip this, level-ups are announced in the channel where the member was chatting.</span></li>
+          <li><span>Create role rewards: <code>/create-level-role [level] @role</code>. Members automatically receive the role when they hit that level.</span></li>
+          <li><span>Members can check their rank with <code>/rank</code> and view the leaderboard with <code>/leaderboard</code>.</span></li>
+        </ol>
+        <div class="guide-tip">💡 Admin commands like <code>/add-xp</code> and <code>/set-level</code> let you manually adjust anyone's progress.</div>
+      </div>
+    </details>
+
+    <details>
+      <summary>
+        <span class="summary-icon">💰</span>
+        Economy — virtual currency and games
+        <i class="summary-chevron">›</i>
+      </summary>
+      <div class="guide-body">
+        <p>The economy system gives your server its own virtual currency with daily rewards and gambling games. Currency has no real-world value.</p>
+        <ol class="guide-steps">
+          <li><span>Enable the economy: <code>/economy enable</code>.</span></li>
+          <li><span>Customize the currency name and symbol: <code>/set-currency [name] [symbol]</code>. Example: <code>/set-currency Coins 🪙</code>.</span></li>
+          <li><span>Members can claim free currency with <code>/daily</code> (once per 24 h) and <code>/hourly</code> (once per hour).</span></li>
+          <li><span>Members can gamble with <code>/gamble</code> — choose from dice, coinflip, slots, or blackjack.</span></li>
+          <li><span>Members can transfer currency to each other with <code>/transfer @user [amount]</code>.</span></li>
+          <li><span>View the richest members with <code>/leaderboard-money</code>.</span></li>
+        </ol>
+        <div class="guide-tip">💡 Use <code>/add-money</code> and <code>/remove-money</code> as admin tools to manually adjust balances.</div>
+      </div>
+    </details>
+
+    <details>
+      <summary>
+        <span class="summary-icon">📋</span>
+        Logging — track events across the server
+        <i class="summary-chevron">›</i>
+      </summary>
+      <div class="guide-body">
+        <p>Logging sends formatted audit messages to a dedicated channel whenever selected events happen on the server.</p>
+        <ol class="guide-steps">
+          <li><span>Create a private <strong>#logs</strong> channel visible only to staff, then run <code>/log-channel #logs</code>.</span></li>
+          <li><span>Enable logging: <code>/logging enable</code>.</span></li>
+          <li><span>Check available event types: <code>/log-events-list</code>.</span></li>
+          <li><span>Add the events you want: <code>/log-events add [event]</code>. Common choices: <code>message_delete</code>, <code>message_edit</code>, <code>member_join</code>, <code>member_leave</code>, <code>ban</code>, <code>kick</code>, <code>timeout</code>.</span></li>
+          <li><span>Exclude noisy channels or bots: <code>/log-ignore-channel #channel</code> or <code>/log-ignore-user @user</code>.</span></li>
+          <li><span>Verify the setup: <code>/log-test</code>.</span></li>
+        </ol>
+      </div>
+    </details>
+
+    <details>
+      <summary>
+        <span class="summary-icon">👋</span>
+        Welcome — greet new members automatically
+        <i class="summary-chevron">›</i>
+      </summary>
+      <div class="guide-body">
+        <p>When a new member joins, Nexus can automatically post a welcome message in a channel of your choice.</p>
+        <ol class="guide-steps">
+          <li><span>Run <code>/welcome-config</code> and follow the prompts to set your welcome channel and message text.</span></li>
+          <li><span>Test how it looks without waiting for someone to join: <code>/test-welcome</code>.</span></li>
+        </ol>
+        <div class="guide-tip">💡 Your welcome message can include the new member's username and server name using placeholders — the setup command will show you which ones are available.</div>
+      </div>
+    </details>
+
+    <details>
+      <summary>
+        <span class="summary-icon">🔢</span>
+        Counting — the classic counting game
+        <i class="summary-chevron">›</i>
+      </summary>
+      <div class="guide-body">
+        <p>Members take turns counting up from 1 in a dedicated channel. If someone sends the wrong number, the count resets.</p>
+        <ol class="guide-steps">
+          <li><span>Create a channel (e.g. <strong>#counting</strong>) and run <code>/counting setup #channel</code>.</span></li>
+          <li><span>Optional — set custom reaction emojis for correct/incorrect counts: <code>/counting reactions</code>.</span></li>
+          <li><span>Optional — decide whether members can also chat in the counting channel: <code>/counting config</code>.</span></li>
+          <li><span>View stats at any time: <code>/counting stats</code>.</span></li>
+        </ol>
+        <div class="guide-tip">💡 The same person cannot count twice in a row — Nexus enforces this automatically.</div>
+      </div>
+    </details>
+
+    <details>
+      <summary>
+        <span class="summary-icon">💬</span>
+        Feedback — suggestions and reports
+        <i class="summary-chevron">›</i>
+      </summary>
+      <div class="guide-body">
+        <p>Give your members a structured way to send suggestions and reports directly through Nexus.</p>
+        <ol class="guide-steps">
+          <li><span>Set up a private staff-only <strong>#suggestions</strong> channel, then run <code>/set-suggestion-channel #channel</code>.</span></li>
+          <li><span>Set up a private <strong>#reports</strong> channel and run <code>/set-report-channel #channel</code>.</span></li>
+          <li><span>Members can now use <code>/suggest [idea]</code> and <code>/report [description]</code> — their submissions appear in the respective channels.</span></li>
+        </ol>
+      </div>
+    </details>
+
+    <details>
+      <summary>
+        <span class="summary-icon">💾</span>
+        Backup — save and restore your server
+        <i class="summary-chevron">›</i>
+      </summary>
+      <div class="guide-body">
+        <p>Nexus can snapshot your server's roles and channels so you can restore them quickly after an accident or a nuke attack.</p>
+        <ol class="guide-steps">
+          <li><span>Create a backup: <code>/backup create [name]</code>. Give it a descriptive name like <code>before-restructure</code>.</span></li>
+          <li><span>To see all saved backups: <code>/backup list</code>.</span></li>
+          <li><span>To inspect what's inside a backup before restoring: <code>/backup info [name]</code>.</span></li>
+          <li><span>To restore: <code>/backup restore [name]</code>. This is non-destructive — it recreates missing roles and channels without deleting existing ones.</span></li>
+          <li><span>To delete an old backup: <code>/backup delete [name]</code>.</span></li>
+        </ol>
+        <div class="guide-tip">💡 It's a good idea to create a backup any time you plan to make major changes to your server structure.</div>
+      </div>
+    </details>
+
+    <details>
+      <summary>
+        <span class="summary-icon">🔐</span>
+        Security Checkup — know your server's risk level
+        <i class="summary-chevron">›</i>
+      </summary>
+      <div class="guide-body">
+        <p>The security checkup scans your server and flags potential risks — no setup required, just run it whenever you want.</p>
+        <ol class="guide-steps">
+          <li><span>Run <code>/security checkup</code>. Nexus will scan your roles, permissions, bots, and Anti-Nuke settings.</span></li>
+          <li><span>Review the results — the report will flag roles with dangerous permissions (e.g. Administrator, Manage Server) and highlight any bots with elevated access.</span></li>
+          <li><span>Address any flagged issues — reduce role permissions where possible and enable Anti-Nuke if it isn't already.</span></li>
+        </ol>
+        <div class="guide-tip">💡 Run a security checkup whenever you add a new bot or create a new role with elevated permissions.</div>
+      </div>
+    </details>
+
+    <details>
+      <summary>
+        <span class="summary-icon">🖼️</span>
+        Images — fun avatar commands
+        <i class="summary-chevron">›</i>
+      </summary>
+      <div class="guide-body">
+        <p>Image commands require no setup — they're ready to use the moment Nexus joins your server.</p>
+        <ol class="guide-steps">
+          <li><span>Run any image command with an optional <code>@user</code> argument to target someone else's avatar.</span></li>
+          <li><span>Examples: <code>/pet @user</code>, <code>/wanted @user</code>, <code>/achievement [text]</code>, <code>/pixel @user</code>, <code>/trash @user</code>.</span></li>
+        </ol>
+      </div>
+    </details>
+
+  </div>
+</section>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-links">
+    <a href="../docs/index.html#privacy">Privacy Policy</a>
+    <a href="../docs/index.html#tos">Terms of Service</a>
+    <a href="https://discord.com/terms" target="_blank" rel="noopener">Discord Terms</a>
+    <a href="https://discord.com/guidelines" target="_blank" rel="noopener">Discord Guidelines</a>
+    <a href="https://discord.com/privacy" target="_blank" rel="noopener">Discord Privacy</a>
+  </div>
+  <div>Nexus Bot &mdash; All rights reserved.</div>
+</footer>
+
+<script>
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cmdGroups = document.querySelectorAll('.cmd-group');
+
+  filterBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const filter = this.dataset.filter;
+
+      filterBtns.forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+
+      cmdGroups.forEach(function(group) {
+        if (filter === 'all' || group.dataset.group === filter) {
+          group.classList.add('visible');
+        } else {
+          group.classList.remove('visible');
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
