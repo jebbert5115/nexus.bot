@@ -911,7 +911,7 @@
         <tr><td><code>/backup create</code></td><td>Create a snapshot of the server's roles and channels</td></tr>
         <tr><td><code>/backup list</code></td><td>List all saved backups for the server</td></tr>
         <tr><td><code>/backup info</code></td><td>View the contents of a specific backup</td></tr>
-        <tr><td><code>/backup restore</code></td><td>Restore roles and channels from a saved backup</td></tr>
+        <tr><td><code>/backup restore</code></td><td>Restore roles and channels from a saved backup — <strong>destructive</strong>, existing data will be overwritten</td></tr>
         <tr><td><code>/backup delete</code></td><td>Permanently delete a saved backup</td></tr>
       </table>
     </div>
@@ -1138,7 +1138,7 @@
           <li><span>Create a backup: <code>/backup create [name]</code>. Give it a descriptive name like <code>before-restructure</code>.</span></li>
           <li><span>To see all saved backups: <code>/backup list</code>.</span></li>
           <li><span>To inspect what's inside a backup before restoring: <code>/backup info [name]</code>.</span></li>
-          <li><span>To restore: <code>/backup restore [name]</code>. This is non-destructive — it recreates missing roles and channels without deleting existing ones.</span></li>
+          <li><span>To restore: <code>/backup restore [name]</code>. <strong>This is a destructive operation</strong> — existing roles and channels will be overwritten or removed as part of the restore process. Make sure you want to fully revert before running this.</span></li>
           <li><span>To delete an old backup: <code>/backup delete [name]</code>.</span></li>
         </ol>
         <div class="guide-tip">💡 It's a good idea to create a backup any time you plan to make major changes to your server structure.</div>
