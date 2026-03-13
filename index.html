@@ -587,6 +587,11 @@
       <p>Reminders, countdowns, invite tracking, sticky messages, server stats, role info, emoji lists, word definitions, and a full <code>/help</code> system.</p>
     </div>
     <div class="feature-card">
+      <span class="feature-icon">⚙️</span>
+      <h3>Management</h3>
+      <p>Delegate owner-level bot control to trusted admins by adding them as co-owners. Co-owners can use any command that is otherwise restricted to the server owner.</p>
+    </div>
+    <div class="feature-card">
       <span class="feature-icon">🔐</span>
       <h3>Security Checkup</h3>
       <p>Run <code>/security checkup</code> to get a full scan of your server's security posture — dangerous role permissions, bot exposure, and Anti-Nuke status.</p>
@@ -658,6 +663,7 @@
     <button class="filter-btn" data-filter="images">🖼️ Images</button>
     <button class="filter-btn" data-filter="backup">💾 Backup</button>
     <button class="filter-btn" data-filter="security">🔐 Security</button>
+    <button class="filter-btn" data-filter="management">⚙️ Management</button>
   </div>
 
   <div class="cmd-groups">
@@ -927,6 +933,19 @@
       </table>
     </div>
 
+    <div class="cmd-group visible" data-group="management">
+      <div class="cmd-group-header">
+        <span>⚙️</span>
+        <h3>Management</h3>
+        <span class="cmd-group-badge">3 commands · Server owner only</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>/manage co-owners view</code></td><td>View the current list of co-owners for this server</td></tr>
+        <tr><td><code>/manage co-owners add</code></td><td>Add a member as a co-owner — grants them access to all owner-level bot commands. The member must already have an Administrator role</td></tr>
+        <tr><td><code>/manage co-owners remove</code></td><td>Remove a member from the co-owner list, revoking their owner-level access</td></tr>
+      </table>
+    </div>
+
   </div>
 </section>
 
@@ -940,6 +959,24 @@
   <p class="section-sub">Click any system below to expand its step-by-step setup guide. Each guide tells you exactly which commands to run and in what order.</p>
 
   <div class="guide-grid">
+
+    <details>
+      <summary>
+        <span class="summary-icon">⚙️</span>
+        Management — co-owners and delegated access
+        <i class="summary-chevron">›</i>
+      </summary>
+      <div class="guide-body">
+        <p>By default, commands like <code>/antinuke</code>, <code>/automod setup</code>, and <code>/security checkup</code> are restricted to the <strong>server owner</strong>. Co-owners let you delegate that access to trusted admins without giving them server ownership on Discord itself.</p>
+        <ol class="guide-steps">
+          <li><span>Make sure the person you want to add as a co-owner already has a role with the <strong>Administrator</strong> permission — Nexus requires this before they can be added.</span></li>
+          <li><span>Add them: <code>/manage co-owners add @user</code>. They will immediately gain access to all owner-level bot commands.</span></li>
+          <li><span>View the current co-owner list at any time: <code>/manage co-owners view</code>.</span></li>
+          <li><span>To revoke access: <code>/manage co-owners remove @user</code>.</span></li>
+        </ol>
+        <div class="guide-tip">💡 Only the actual <strong>server owner</strong> (the person who owns the Discord server) can add or remove co-owners — co-owners cannot promote others.</div>
+      </div>
+    </details>
 
     <details>
       <summary>
