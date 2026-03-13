@@ -598,7 +598,7 @@
 
 <!-- ══ GETTING STARTED ══ -->
 <section class="section" id="getting-started">
-  <div class="section-label">For Dummies Guide</div>
+  <div class="section-label">Quick Start Guide</div>
   <h2 class="section-title">Getting started in 4 steps</h2>
   <p class="section-sub">You don't need to be technical to set up Nexus. Here's everything you need to do after adding the bot to your server.</p>
 
@@ -607,7 +607,7 @@
       <div class="step-num">1</div>
       <div class="step-body">
         <h3>Add Nexus to your server</h3>
-        <p>Click the <strong>Add Nexus to Your Server</strong> button above. You'll need the <strong>Manage Server</strong> permission on Discord to add bots. Select your server from the dropdown and approve the requested permissions.</p>
+        <p>Click the <strong>Add Nexus to Your Server</strong> button above. You'll need the <strong>Manage Server</strong> permission on Discord to add bots. Select your server from the dropdown and approve the requested permissions — make sure to grant <strong>Administrator</strong> when prompted, as Nexus requires it to manage roles, channels, AutoMod rules, and moderation actions.</p>
       </div>
     </div>
     <div class="step">
@@ -1076,6 +1076,24 @@
 
     <details>
       <summary>
+        <span class="summary-icon">📣</span>
+        Join Announcements — announce new members and track invites
+        <i class="summary-chevron">›</i>
+      </summary>
+      <div class="guide-body">
+        <p>Nexus can post a message in a channel every time someone joins the server, and track which invite link they used to get there.</p>
+        <ol class="guide-steps">
+          <li><span>Create a channel for join announcements (e.g. <strong>#joins</strong>), then run <code>/set-join-channel #channel</code>.</span></li>
+          <li><span>Test that it's working: <code>/test-join-announce</code> — Nexus will post a sample announcement immediately.</span></li>
+          <li><span>To see who invited a specific member and which link they used: <code>/inviter @user</code>.</span></li>
+          <li><span>To view a leaderboard of who has invited the most members: <code>/invites</code>.</span></li>
+        </ol>
+        <div class="guide-tip">💡 Join Announcements and Welcome messages are separate — Join Announcements are a simple notification, while <strong>Welcome</strong> (configured with <code>/welcome-config</code>) lets you write a fully customized greeting message.</div>
+      </div>
+    </details>
+
+    <details>
+      <summary>
         <span class="summary-icon">🔢</span>
         Counting — the classic counting game
         <i class="summary-chevron">›</i>
@@ -1166,8 +1184,8 @@
 <!-- ══ FOOTER ══ -->
 <footer>
   <div class="footer-links">
-    <a href="../docs/index.html#privacy">Privacy Policy</a>
-    <a href="../docs/index.html#tos">Terms of Service</a>
+    <a href="https://jebbert5115.github.io/nexusdocs/#privacy" target="_blank" rel="noopener">Privacy Policy</a>
+    <a href="https://jebbert5115.github.io/nexusdocs/#tos" target="_blank" rel="noopener">Terms of Service</a>
     <a href="https://discord.com/terms" target="_blank" rel="noopener">Discord Terms</a>
     <a href="https://discord.com/guidelines" target="_blank" rel="noopener">Discord Guidelines</a>
     <a href="https://discord.com/privacy" target="_blank" rel="noopener">Discord Privacy</a>
