@@ -518,7 +518,7 @@
 <section class="section" id="features">
   <div class="section-label">What Nexus Does</div>
   <h2 class="section-title">A complete toolkit for every server</h2>
-  <p class="section-sub">Nexus is built around 14 feature systems. Whether you run a small friend group or a large community, every system can be enabled and configured independently to fit your needs.</p>
+  <p class="section-sub">Nexus is built around 16 feature systems. Whether you run a small friend group or a large community, every system can be enabled and configured independently to fit your needs.</p>
 
   <div class="feature-grid">
     <div class="feature-card">
@@ -579,7 +579,7 @@
     <div class="feature-card">
       <span class="feature-icon">🖼️</span>
       <h3>Images</h3>
-      <p>Fun image commands — pet avatars, Minecraft achievement cards, wanted posters, pixelated avatars, and more.</p>
+      <p>Fun image commands — pet avatars, Minecraft achievements, wanted posters, wasted screens, ship compatibility, deep-fried avatars, glitch effects, and more.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">🔧</span>
@@ -595,6 +595,11 @@
       <span class="feature-icon">🔐</span>
       <h3>Security Checkup</h3>
       <p>Run <code>/security checkup</code> to get a full scan of your server's security posture — dangerous role permissions, bot exposure, and Anti-Nuke status.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📝</span>
+      <h3>Bot Log</h3>
+      <p>Automatically log every bot action — kicks, bans, timeouts, purges, AutoMod changes, and anti-nuke triggers — to a dedicated audit channel.</p>
     </div>
   </div>
 </section>
@@ -664,6 +669,7 @@
     <button class="filter-btn" data-filter="backup">💾 Backup</button>
     <button class="filter-btn" data-filter="security">🔐 Security</button>
     <button class="filter-btn" data-filter="management">⚙️ Management</button>
+    <button class="filter-btn" data-filter="botlog">📝 Bot Log</button>
   </div>
 
   <div class="cmd-groups">
@@ -855,13 +861,13 @@
         <span class="cmd-group-badge">7 commands</span>
       </div>
       <table class="cmd-table">
-        <tr><td><code>/logging</code></td><td>Enable, disable, or view the current logging configuration</td></tr>
-        <tr><td><code>/log-channel</code></td><td>Set the channel where log events are posted</td></tr>
-        <tr><td><code>/log-events</code></td><td>Add or remove specific event types to log (e.g. message deletes, bans)</td></tr>
-        <tr><td><code>/log-events-list</code></td><td>Show a list of all available log event types</td></tr>
-        <tr><td><code>/log-ignore-channel</code></td><td>Exclude a channel from being logged</td></tr>
-        <tr><td><code>/log-ignore-user</code></td><td>Exclude a specific user from being logged</td></tr>
-        <tr><td><code>/log-test</code></td><td>Send a test log message to verify the setup is working</td></tr>
+        <tr><td><code>/log manage</code></td><td>Enable, disable, or view the current logging configuration</td></tr>
+        <tr><td><code>/log channel</code></td><td>Set the channel where log events are posted</td></tr>
+        <tr><td><code>/log events</code></td><td>Add or remove specific event types to log (e.g. message deletes, bans)</td></tr>
+        <tr><td><code>/log events-list</code></td><td>Show a list of all available log event types</td></tr>
+        <tr><td><code>/log ignore-channel</code></td><td>Exclude a channel from being logged</td></tr>
+        <tr><td><code>/log ignore-user</code></td><td>Exclude a specific user from being logged</td></tr>
+        <tr><td><code>/log test</code></td><td>Send a test log message to verify the setup is working</td></tr>
       </table>
     </div>
 
@@ -896,7 +902,7 @@
       <div class="cmd-group-header">
         <span>🖼️</span>
         <h3>Images</h3>
-        <span class="cmd-group-badge">5 commands</span>
+        <span class="cmd-group-badge">9 commands</span>
       </div>
       <table class="cmd-table">
         <tr><td><code>/pet</code></td><td>Generate an animated "petting" GIF using someone's avatar</td></tr>
@@ -904,6 +910,10 @@
         <tr><td><code>/wanted</code></td><td>Create a Wild West wanted poster with someone's avatar</td></tr>
         <tr><td><code>/trash</code></td><td>Put someone's avatar into a trash can image</td></tr>
         <tr><td><code>/pixel</code></td><td>Pixelate someone's avatar</td></tr>
+        <tr><td><code>/wasted</code></td><td>Overlay a GTA V-style "WASTED" screen on someone's avatar</td></tr>
+        <tr><td><code>/ship</code></td><td>Reveal the compatibility score between two users</td></tr>
+        <tr><td><code>/deepfry</code></td><td>Deep-fry someone's avatar with heavy compression and saturation</td></tr>
+        <tr><td><code>/glitch</code></td><td>Apply RGB channel-shift and slice glitch distortion to someone's avatar</td></tr>
       </table>
     </div>
 
@@ -943,6 +953,19 @@
         <tr><td><code>/manage co-owners view</code></td><td>View the current list of co-owners for this server</td></tr>
         <tr><td><code>/manage co-owners add</code></td><td>Add a member as a co-owner — grants them access to all owner-level bot commands. The member must already have an Administrator role</td></tr>
         <tr><td><code>/manage co-owners remove</code></td><td>Remove a member from the co-owner list, revoking their owner-level access</td></tr>
+      </table>
+    </div>
+
+    <div class="cmd-group visible" data-group="botlog">
+      <div class="cmd-group-header">
+        <span>📝</span>
+        <h3>Bot Log</h3>
+        <span class="cmd-group-badge">3 commands · Server owner only</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>/botlog channel</code></td><td>Set the channel where bot action logs are sent</td></tr>
+        <tr><td><code>/botlog enabled</code></td><td>Enable or disable bot action logging</td></tr>
+        <tr><td><code>/botlog status</code></td><td>View the current bot log configuration</td></tr>
       </table>
     </div>
 
@@ -1078,6 +1101,26 @@
 
     <details>
       <summary>
+        <span class="summary-icon">📝</span>
+        Bot Log — audit trail for bot actions
+        <i class="summary-chevron">›</i>
+      </summary>
+      <div class="guide-body">
+        <p>Bot Log keeps a record of every action Nexus takes — moderation commands, anti-nuke triggers, and AutoMod changes — in a dedicated channel. This is separate from Discord's built-in audit log and the server event logging system.</p>
+        <ol class="guide-steps">
+          <li><span>Create a private channel for the audit trail (e.g. <strong>#bot-log</strong>), visible only to server staff.</span></li>
+          <li><span>Set the log channel: <code>/botlog channel #bot-log</code>.</span></li>
+          <li><span>Enable logging: <code>/botlog enabled True</code>.</span></li>
+          <li><span>From now on, every kick, ban, timeout, purge, warn, AutoMod change, and anti-nuke action will be logged to that channel automatically.</span></li>
+          <li><span>Check the current configuration at any time: <code>/botlog status</code>.</span></li>
+          <li><span>To pause logging without losing the channel setting: <code>/botlog enabled False</code>.</span></li>
+        </ol>
+        <div class="guide-tip">💡 Bot Log captures actions that Nexus itself performs. For tracking member events (joins, leaves, message edits/deletes), use the separate <strong>Logging</strong> system below.</div>
+      </div>
+    </details>
+
+    <details>
+      <summary>
         <span class="summary-icon">📋</span>
         Logging — track events across the server
         <i class="summary-chevron">›</i>
@@ -1085,12 +1128,12 @@
       <div class="guide-body">
         <p>Logging sends formatted audit messages to a dedicated channel whenever selected events happen on the server.</p>
         <ol class="guide-steps">
-          <li><span>Create a private <strong>#logs</strong> channel visible only to staff, then run <code>/log-channel #logs</code>.</span></li>
-          <li><span>Enable logging: <code>/logging enable</code>.</span></li>
-          <li><span>Check available event types: <code>/log-events-list</code>.</span></li>
-          <li><span>Add the events you want: <code>/log-events add [event]</code>. Common choices: <code>message_delete</code>, <code>message_edit</code>, <code>member_join</code>, <code>member_leave</code>, <code>ban</code>, <code>kick</code>, <code>timeout</code>.</span></li>
-          <li><span>Exclude noisy channels or bots: <code>/log-ignore-channel #channel</code> or <code>/log-ignore-user @user</code>.</span></li>
-          <li><span>Verify the setup: <code>/log-test</code>.</span></li>
+          <li><span>Create a private <strong>#logs</strong> channel visible only to staff, then run <code>/log channel #logs</code>.</span></li>
+          <li><span>Enable logging: <code>/log manage setup</code>.</span></li>
+          <li><span>Check available event types: <code>/log events-list</code>.</span></li>
+          <li><span>Add the events you want: <code>/log events add [event]</code>. Common choices: <code>message_delete</code>, <code>message_edit</code>, <code>member_join</code>, <code>member_leave</code>, <code>ban</code>, <code>kick</code>, <code>timeout</code>.</span></li>
+          <li><span>Exclude noisy channels or bots: <code>/log ignore-channel #channel</code> or <code>/log ignore-user @user</code>.</span></li>
+          <li><span>Verify the setup: <code>/log test</code>.</span></li>
         </ol>
       </div>
     </details>
