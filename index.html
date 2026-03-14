@@ -650,7 +650,7 @@
 <section class="section" id="commands">
   <div class="section-label">Command Reference</div>
   <h2 class="section-title">All commands at a glance</h2>
-  <p class="section-sub">Nexus uses slash commands (<code>/command</code>) for everything. Moderation commands also support the <code>n!</code> prefix (e.g. <code>n!kick</code>, <code>n!ban</code>). Filter by category below.</p>
+  <p class="section-sub">Nexus uses slash commands (<code>/command</code>) for everything. Moderation commands also support the <code>n!</code> / <code>N!</code> prefix (e.g. <code>n!kick</code>, <code>n!ban</code>, <code>n!mute</code>). Filter by category below.</p>
 
   <div class="cmd-filter-bar">
     <button class="filter-btn active" data-filter="all">All</button>
@@ -695,7 +695,26 @@
         <tr><td><code>/unlock</code></td><td>Unlock a previously locked channel</td></tr>
         <tr><td><code>/softban</code></td><td>Ban then instantly unban (clears recent messages without a permanent ban)</td></tr>
       </table>
-      <p class="cmd-note">Prefix versions also available: <code>n!kick</code>, <code>n!ban</code>, <code>n!sb</code>, <code>n!t</code>, <code>n!ut</code></p>
+      <div class="cmd-group-header" style="margin-top:12px">
+        <span>⌨️</span>
+        <h3>n! Prefix Commands</h3>
+        <span class="cmd-group-badge">Both <code style="background:none;border:none;padding:0;font-size:inherit">n!</code> and <code style="background:none;border:none;padding:0;font-size:inherit">N!</code> work</span>
+      </div>
+      <table class="cmd-table">
+        <tr><td><code>n!purge</code> / <code>n!p</code> / <code>n!clear</code></td><td>Delete multiple messages</td></tr>
+        <tr><td><code>n!warn</code> / <code>n!w</code></td><td>Warn a member</td></tr>
+        <tr><td><code>n!warnings</code></td><td>View warnings for a member</td></tr>
+        <tr><td><code>n!clearwarnings</code> / <code>n!cw</code></td><td>Clear all warnings for a member</td></tr>
+        <tr><td><code>n!kick</code> / <code>n!k</code></td><td>Kick a member</td></tr>
+        <tr><td><code>n!ban</code> / <code>n!b</code></td><td>Ban a member</td></tr>
+        <tr><td><code>n!unban</code> / <code>n!ub</code></td><td>Unban a user</td></tr>
+        <tr><td><code>n!timeout</code> / <code>n!t</code> / <code>n!mute</code> / <code>n!m</code></td><td>Timeout a member</td></tr>
+        <tr><td><code>n!untimeout</code> / <code>n!ut</code> / <code>n!unmute</code></td><td>Remove a timeout from a member</td></tr>
+        <tr><td><code>n!slowmode</code></td><td>Set a slowmode delay for a channel</td></tr>
+        <tr><td><code>n!lock</code></td><td>Lock a channel</td></tr>
+        <tr><td><code>n!unlock</code></td><td>Unlock a channel</td></tr>
+        <tr><td><code>n!softban</code> / <code>n!sb</code></td><td>Softban a member</td></tr>
+      </table>
     </div>
 
     <div class="cmd-group visible" data-group="antinuke">
@@ -1017,7 +1036,7 @@
           <li><span>Use <code>/timeout @user [duration]</code> to mute a member temporarily. Duration examples: <code>10m</code>, <code>1h</code>, <code>7d</code>.</span></li>
           <li><span>Use <code>/softban @user</code> to clear a user's recent messages without a permanent ban.</span></li>
         </ol>
-        <div class="guide-tip">💡 Prefix versions work too: <code>n!kick</code>, <code>n!ban</code>, <code>n!t</code> (timeout), <code>n!ut</code> (untimeout), <code>n!sb</code> (softban).</div>
+        <div class="guide-tip">💡 Prefix versions work too: <code>n!kick</code>, <code>n!ban</code>, <code>n!t</code> / <code>n!mute</code> / <code>n!m</code> (timeout), <code>n!ut</code> / <code>n!unmute</code> (untimeout), <code>n!sb</code> (softban). Both <code>n!</code> and <code>N!</code> prefixes are accepted.</div>
       </div>
     </details>
 
