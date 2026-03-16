@@ -564,7 +564,7 @@
     <div class="feature-card">
       <span class="feature-icon">🔢</span>
       <h3>Counting</h3>
-      <p>The classic counting game — set a dedicated channel, and Nexus tracks the count, reacts with emojis, and resets on mistakes.</p>
+      <p>The classic counting game — set a dedicated channel, and Nexus tracks the count, reacts with emojis, and supports optional math expressions. Players can earn saves by completing mini-games, protecting the count when they slip up. Configure resets, fail roles, and more.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">💬</span>
@@ -709,7 +709,7 @@
         <tr><td><code>n!ban</code> / <code>n!b</code></td><td>Ban a member</td></tr>
         <tr><td><code>n!unban</code> / <code>n!ub</code></td><td>Unban a user</td></tr>
         <tr><td><code>n!timeout</code> / <code>n!t</code> / <code>n!mute</code> / <code>n!m</code></td><td>Timeout a member</td></tr>
-        <tr><td><code>n!untimeout</code> / <code>n!ut</code> / <code>n!unmute</code></td><td>Remove a timeout from a member</td></tr>
+        <tr><td><code>n!untimeout</code> / <code>n!ut</code> / <code>n!unmute</code> / <code>n!um</code></td><td>Remove a timeout from a member</td></tr>
         <tr><td><code>n!slowmode</code></td><td>Set a slowmode delay for a channel</td></tr>
         <tr><td><code>n!lock</code></td><td>Lock a channel</td></tr>
         <tr><td><code>n!unlock</code></td><td>Unlock a channel</td></tr>
@@ -780,7 +780,7 @@
         <tr><td><code>/role-info</code></td><td>View details about a specific role</td></tr>
         <tr><td><code>/server-info</code></td><td>View general server information</td></tr>
         <tr><td><code>/set-join-channel</code></td><td>Set a channel for join announcements</td></tr>
-        <tr><td><code>/test-join-announce</code></td><td>Test the join announcement in the configured channel</td></tr>
+        <tr><td><code>/invites-config</code></td><td>Enable or disable invite tracking for the server</td></tr>
         <tr><td><code>/inviter</code></td><td>See which invite link a user joined with (and who made it)</td></tr>
         <tr><td><code>/invites</code></td><td>View the invite leaderboard for the server</td></tr>
         <tr><td><code>/sticky set</code></td><td>Set a sticky message that re-posts itself after every message in a channel</td></tr>
@@ -862,14 +862,16 @@
       <div class="cmd-group-header">
         <span>🔢</span>
         <h3>Counting</h3>
-        <span class="cmd-group-badge">5 commands</span>
+        <span class="cmd-group-badge">7 commands</span>
       </div>
       <table class="cmd-table">
         <tr><td><code>/counting setup</code></td><td>Designate a channel as the counting game channel</td></tr>
         <tr><td><code>/counting stats</code></td><td>View counting game statistics (current count, high score, etc.)</td></tr>
         <tr><td><code>/counting reactions</code></td><td>Set the emoji reactions for correct and incorrect counts</td></tr>
         <tr><td><code>/counting reset</code></td><td>Reset the current count back to zero</td></tr>
-        <tr><td><code>/counting config</code></td><td>Allow or disallow regular chat messages in the counting channel</td></tr>
+        <tr><td><code>/counting config</code></td><td>Configure counting behaviour — allow chat, enable math expressions, control reset-on-wrong, and assign a fail role</td></tr>
+        <tr><td><code>/counting earn</code></td><td>Complete a mini-game to earn a save (6-hour cooldown)</td></tr>
+        <tr><td><code>/counting saves</code></td><td>Check how many saves you have</td></tr>
       </table>
     </div>
 
@@ -1036,7 +1038,7 @@
           <li><span>Use <code>/timeout @user [duration]</code> to mute a member temporarily. Duration examples: <code>10m</code>, <code>1h</code>, <code>7d</code>.</span></li>
           <li><span>Use <code>/softban @user</code> to clear a user's recent messages without a permanent ban.</span></li>
         </ol>
-        <div class="guide-tip">💡 Prefix versions work too: <code>n!kick</code>, <code>n!ban</code>, <code>n!t</code> / <code>n!mute</code> / <code>n!m</code> (timeout), <code>n!ut</code> / <code>n!unmute</code> (untimeout), <code>n!sb</code> (softban). Both <code>n!</code> and <code>N!</code> prefixes are accepted.</div>
+        <div class="guide-tip">💡 Prefix versions work too: <code>n!kick</code>, <code>n!ban</code>, <code>n!t</code> / <code>n!mute</code> / <code>n!m</code> (timeout), <code>n!ut</code> / <code>n!unmute</code> / <code>n!um</code> (untimeout), <code>n!sb</code> (softban). Both <code>n!</code> and <code>N!</code> prefixes are accepted.</div>
       </div>
     </details>
 
@@ -1183,7 +1185,7 @@
         <p>Nexus can post a message in a channel every time someone joins the server, and track which invite link they used to get there.</p>
         <ol class="guide-steps">
           <li><span>Create a channel for join announcements (e.g. <strong>#joins</strong>), then run <code>/set-join-channel #channel</code>.</span></li>
-          <li><span>Test that it's working: <code>/test-join-announce</code> — Nexus will post a sample announcement immediately.</span></li>
+          <li><span>To enable or disable invite tracking (who invited whom): <code>/invites-config enabled:True</code> or <code>/invites-config enabled:False</code>.</span></li>
           <li><span>To see who invited a specific member and which link they used: <code>/inviter @user</code>.</span></li>
           <li><span>To view a leaderboard of who has invited the most members: <code>/invites</code>.</span></li>
         </ol>
@@ -1202,7 +1204,12 @@
         <ol class="guide-steps">
           <li><span>Create a channel (e.g. <strong>#counting</strong>) and run <code>/counting setup #channel</code>.</span></li>
           <li><span>Optional — set custom reaction emojis for correct/incorrect counts: <code>/counting reactions</code>.</span></li>
-          <li><span>Optional — decide whether members can also chat in the counting channel: <code>/counting config</code>.</span></li>
+          <li><span>Optional — customize the counting rules with <code>/counting config</code>. You must set all three toggles each time: <code>allow_chat</code>, <code>enable_maths</code>, and <code>enable_saves</code>. Example: <code>/counting config allow_chat:False enable_maths:True enable_saves:True</code>.</span></li>
+          <li><span><strong>allow_chat</strong> — when True, members can send regular messages in the counting channel without them being deleted.</span></li>
+          <li><span><strong>enable_maths</strong> — when True, members can count using math expressions like <code>2+2</code> or <code>3*4</code> (PEMDAS rules apply).</span></li>
+          <li><span><strong>enable_saves</strong> — when False, a wrong number resets the game to 1 and announces it in the channel. When True, the count is preserved after a mistake.</span></li>
+          <li><span>Optional — assign a role to anyone who counts wrong by adding <code>map_fail_role:@role</code>. Remove it later with <code>unmap_fail_role:True</code>.</span></li>
+          <li><span>Optional — players can earn saves to protect against wrong counts by running <code>/counting earn</code>. A random mini-game is presented (color sequence, jumbled word, or trivia). With <code>enable_saves:False</code>, a player who has a save will automatically use it when they count wrong — the count is preserved and the channel is notified.</span></li>
           <li><span>View stats at any time: <code>/counting stats</code>.</span></li>
         </ol>
         <div class="guide-tip">💡 The same person cannot count twice in a row — Nexus enforces this automatically.</div>
